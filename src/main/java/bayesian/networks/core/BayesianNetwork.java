@@ -15,7 +15,7 @@ public class BayesianNetwork {
 
 	public void addNode(BayesianNetworkNode node) {
 		if (node != null) {
-			this.nodesMap.put(node.getRandomVariable().getIdentifier(), node);
+			this.nodesMap.put(node.getIdentifier(), node);
 		}
 	}
 	

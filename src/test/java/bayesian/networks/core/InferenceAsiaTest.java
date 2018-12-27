@@ -17,7 +17,6 @@ import bayesian.networks.inference.Inference;
 import bayesian.networks.inference.exact.EnumerationInference;
 import bayesian.networks.io.JSONBNParser;
 import bayesian.networks.stats.DiscreteDistribution;
-import bayesian.networks.stats.RandomVariable;
 
 public class InferenceAsiaTest {
 	
@@ -36,9 +35,9 @@ public class InferenceAsiaTest {
 	@Test
 	public void testEmptyEvidence() throws FileNotFoundException, ParseException, IOException{
 
-		Map<RandomVariable, String> evidence = new HashMap<>();
+		Map<BayesianNetworkNode, String> evidence = new HashMap<>();
 
-		RandomVariable query = network.getNode("either").getRandomVariable();
+		BayesianNetworkNode query = network.getNode("either");
 		
 		DiscreteDistribution probability = inference.doInference(evidence, query);
 		
@@ -51,12 +50,12 @@ public class InferenceAsiaTest {
 	@Test
 	public void testAsia() throws FileNotFoundException, ParseException, IOException{
 
-		Map<RandomVariable, String> evidence = new HashMap<>();
+		Map<BayesianNetworkNode, String> evidence = new HashMap<>();
 
-		RandomVariable asia = network.getNode("asia").getRandomVariable();
+		BayesianNetworkNode asia = network.getNode("asia");
 		evidence.put(asia, "yes");
 		
-		RandomVariable query = network.getNode("either").getRandomVariable();
+		BayesianNetworkNode query = network.getNode("either");
 		
 		DiscreteDistribution probability = inference.doInference(evidence, query);
 		
@@ -69,14 +68,14 @@ public class InferenceAsiaTest {
 	@Test
 	public void testAsiaAndSmoke() throws FileNotFoundException, ParseException, IOException{
 
-		Map<RandomVariable, String> evidence = new HashMap<>();
+		Map<BayesianNetworkNode, String> evidence = new HashMap<>();
 
-		RandomVariable asia = network.getNode("asia").getRandomVariable();
+		BayesianNetworkNode asia = network.getNode("asia");
 		evidence.put(asia, "yes");
-		RandomVariable smoke = network.getNode("smoke").getRandomVariable();
+		BayesianNetworkNode smoke = network.getNode("smoke");
 		evidence.put(smoke, "yes");
 		
-		RandomVariable query = network.getNode("either").getRandomVariable();
+		BayesianNetworkNode query = network.getNode("either");
 		
 		DiscreteDistribution probability = inference.doInference(evidence, query);
 		
@@ -89,16 +88,16 @@ public class InferenceAsiaTest {
 	@Test
 	public void testAsiaSmokeAndXray() throws FileNotFoundException, ParseException, IOException{
 
-		Map<RandomVariable, String> evidence = new HashMap<>();
+		Map<BayesianNetworkNode, String> evidence = new HashMap<>();
 
-		RandomVariable asia = network.getNode("asia").getRandomVariable();
+		BayesianNetworkNode asia = network.getNode("asia");
 		evidence.put(asia, "yes");
-		RandomVariable smoke = network.getNode("smoke").getRandomVariable();
+		BayesianNetworkNode smoke = network.getNode("smoke");
 		evidence.put(smoke, "yes");
-		RandomVariable xray = network.getNode("xray").getRandomVariable();
+		BayesianNetworkNode xray = network.getNode("xray");
 		evidence.put(xray, "yes");
 		
-		RandomVariable query = network.getNode("either").getRandomVariable();
+		BayesianNetworkNode query = network.getNode("either");
 		
 		DiscreteDistribution probability = inference.doInference(evidence, query);
 		
@@ -111,18 +110,18 @@ public class InferenceAsiaTest {
 	@Test
 	public void testAsiaSmokeXrayAndDiyspnea() throws FileNotFoundException, ParseException, IOException{
 
-		Map<RandomVariable, String> evidence = new HashMap<>();
+		Map<BayesianNetworkNode, String> evidence = new HashMap<>();
 
-		RandomVariable asia = network.getNode("asia").getRandomVariable();
+		BayesianNetworkNode asia = network.getNode("asia");
 		evidence.put(asia, "yes");
-		RandomVariable smoke = network.getNode("smoke").getRandomVariable();
+		BayesianNetworkNode smoke = network.getNode("smoke");
 		evidence.put(smoke, "yes");
-		RandomVariable xray = network.getNode("xray").getRandomVariable();
+		BayesianNetworkNode xray = network.getNode("xray");
 		evidence.put(xray, "yes");
-		RandomVariable dysp = network.getNode("dysp").getRandomVariable();
+		BayesianNetworkNode dysp = network.getNode("dysp");
 		evidence.put(dysp, "yes");
 		
-		RandomVariable query = network.getNode("either").getRandomVariable();
+		BayesianNetworkNode query = network.getNode("either");
 		
 		DiscreteDistribution probability = inference.doInference(evidence, query);
 		

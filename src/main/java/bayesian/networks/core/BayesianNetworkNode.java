@@ -6,22 +6,24 @@ import java.util.List;
 import java.util.Map;
 
 import bayesian.networks.stats.DiscreteDistribution;
-import bayesian.networks.stats.RandomVariable;
+import bayesian.networks.stats.Domain;
 
 public class BayesianNetworkNode {
 	
 	private Long id;
 	
-	private RandomVariable randomVariable;
+	private String identifier;
+	private Domain domain;
 	
 	private List<BayesianNetworkNode> parents;
 	
 	private DiscreteDistribution cpt;
 
-	public BayesianNetworkNode(Long id, RandomVariable randomVariable, List<BayesianNetworkNode> parents) {
+	public BayesianNetworkNode(Long id, String identifier, Domain domain, List<BayesianNetworkNode> parents) {
 		super();
 		this.id = id;
-		this.randomVariable = randomVariable;
+		this.identifier = identifier;
+		this.domain = domain;
 		this.setParents(parents);
 	}
 	
@@ -29,8 +31,12 @@ public class BayesianNetworkNode {
 		return id;
 	}
 
-	public RandomVariable getRandomVariable() {
-		return randomVariable;
+	public String getIdentifier() {
+		return identifier;
+	}
+	
+	public Domain getDomain() {
+		return domain;
 	}
 
 	public List<BayesianNetworkNode> getParents() {
@@ -57,7 +63,7 @@ public class BayesianNetworkNode {
 		
 		if (obj instanceof BayesianNetworkNode) {
 			BayesianNetworkNode other = (BayesianNetworkNode) obj;
-			result = this.randomVariable.equals(other.randomVariable);
+			result = this.identifier.equals(other.identifier);
 		}
 		
 		return result;
@@ -66,8 +72,8 @@ public class BayesianNetworkNode {
 	@Override
 	public int hashCode() {
 		int result = 37;
-		if(this.randomVariable != null) {
-			result = this.randomVariable.hashCode();
+		if(this.identifier != null) {
+			result = this.identifier.hashCode();
 		}
 		return result;
 	}
@@ -75,24 +81,24 @@ public class BayesianNetworkNode {
 	@Override
 	public String toString() {
 		String result = "id " + this.getId();
-		if(this.randomVariable != null) {
-			result = result + " - " + this.randomVariable.toString();
+		if(this.identifier != null) {
+			result = result + " - " + this.identifier;
 		} else {
 			result = result + " - no-var";
 		}
 		return result;
 	}
 
-	public double getProbability(Map<RandomVariable, String> evidence) {
+	public double getProbability(Map<BayesianNetworkNode, String> evidence) {
 		ArrayList<String> states = new ArrayList<>(this.parents.size() + 1);
 		for(BayesianNetworkNode parent : this.parents) {
-			String value = evidence.get(parent.getRandomVariable());
+			String value = evidence.get(parent);
 			if(value == null) {
-				throw new IllegalArgumentException("Evidence has't a value for " + parent.getRandomVariable().getIdentifier());
+				throw new IllegalArgumentException("Evidence has't a value for " + parent.getIdentifier());
 			}
 			states.add(value);
 		}
-		String value = evidence.get(this.getRandomVariable());
+		String value = evidence.get(this);
 		states.add(value);
 		DiscreteDistribution.Entry entry = this.cpt.new Entry(states);
 		Double result = this.cpt.getValue(entry);

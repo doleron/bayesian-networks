@@ -10,7 +10,6 @@ import bayesian.networks.core.BayesianNetworkNode;
 import bayesian.networks.inference.Inference;
 import bayesian.networks.inference.NodeSorter;
 import bayesian.networks.stats.DiscreteDistribution;
-import bayesian.networks.stats.RandomVariable;
 
 public class EnumerationInference implements Inference {
 	
@@ -25,11 +24,11 @@ public class EnumerationInference implements Inference {
 	}
 
 	@Override
-	public DiscreteDistribution doInference(Map<RandomVariable, String> evidence, RandomVariable query) {
+	public DiscreteDistribution doInference(Map<BayesianNetworkNode, String> evidence, BayesianNetworkNode query) {
 		DiscreteDistribution result = new DiscreteDistribution();
 		List<String> values = query.getDomain().getValues();
 		for(String value : values) {
-			Map<RandomVariable, String> clone = new HashMap<>(evidence);
+			Map<BayesianNetworkNode, String> clone = new HashMap<>(evidence);
 			clone.put(query, value);
 			double probability = probability(this.sorted, clone);
 			ArrayList<String> states = new ArrayList<>();
@@ -41,19 +40,19 @@ public class EnumerationInference implements Inference {
 		return result;
 	}
 	
-	private double probability(List<BayesianNetworkNode> nodes, Map<RandomVariable, String> evidence) {
+	private double probability(List<BayesianNetworkNode> nodes, Map<BayesianNetworkNode, String> evidence) {
 		double result = 1.0;
 		if(!nodes.isEmpty()) {
 			List<BayesianNetworkNode> remainNodes = new ArrayList<>(nodes);
 			BayesianNetworkNode node = remainNodes.remove(0);
-			if(evidence.containsKey(node.getRandomVariable())) {
+			if(evidence.containsKey(node)) {
 				result = node.getProbability(evidence) * probability(remainNodes, evidence);
 			} else {
-				List<String> values = node.getRandomVariable().getDomain().getValues();
+				List<String> values = node.getDomain().getValues();
 				
 				result = values.stream().mapToDouble(value -> {
-					Map<RandomVariable, String> clone = new HashMap<>(evidence);
-					clone.put(node.getRandomVariable(), value);
+					Map<BayesianNetworkNode, String> clone = new HashMap<>(evidence);
+					clone.put(node, value);
 					return node.getProbability(clone) * probability(remainNodes, clone);
 				}).sum();
 				

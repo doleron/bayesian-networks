@@ -34,7 +34,7 @@ public class SortAsiaTest {
 				"dysp");
 
 		IntStream.range(0, expectedSequence.size()).forEach(i -> assertEquals("element " + i + " doesn't match",
-				expectedSequence.get(i), sortedNodes.get(i).getRandomVariable().getIdentifier()));
+				expectedSequence.get(i), sortedNodes.get(i).getIdentifier()));
 
 	}
 

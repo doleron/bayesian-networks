@@ -23,7 +23,6 @@ import bayesian.networks.core.BayesianNetwork;
 import bayesian.networks.core.BayesianNetworkNode;
 import bayesian.networks.stats.DiscreteDistribution;
 import bayesian.networks.stats.Domain;
-import bayesian.networks.stats.RandomVariable;
 
 public class JSONBNParser {
 
@@ -68,8 +67,7 @@ public class JSONBNParser {
 				}
 
 				Domain domain = new Domain(values);
-				RandomVariable randomVariable = new RandomVariable(identifier, domain);
-				BayesianNetworkNode node = new BayesianNetworkNode(id, randomVariable, null);
+				BayesianNetworkNode node = new BayesianNetworkNode(id, identifier, domain, null);
 				result.addNode(node);
 
 			}
@@ -108,7 +106,7 @@ public class JSONBNParser {
 			Collection<BayesianNetworkNode> nodes = result.getNodes();
 
 			for (BayesianNetworkNode node : nodes) {
-				List<BayesianNetworkNode> parents = mapParents.get(node.getRandomVariable().getIdentifier());
+				List<BayesianNetworkNode> parents = mapParents.get(node.getIdentifier());
 				if (parents != null) {
 					Collections.sort(parents, nodeComparatorById);
 					node.setParents(parents);
@@ -142,7 +140,7 @@ public class JSONBNParser {
 			JSONObject jsonObject, DiscreteDistribution cpt) {
 
 		if (remainParents.isEmpty()) {
-			List<String> values = node.getRandomVariable().getDomain().getValues();
+			List<String> values = node.getDomain().getValues();
 			for (String value : values) {
 				
 				List<String> newStates = new ArrayList<>(states);
@@ -157,7 +155,7 @@ public class JSONBNParser {
 			}
 		} else {
 			BayesianNetworkNode first = remainParents.remove(0);
-			List<String> values = first.getRandomVariable().getDomain().getValues();
+			List<String> values = first.getDomain().getValues();
 			for (String value : values) {
 				List<String> newStates = new ArrayList<>(states);
 				newStates.add(value);
